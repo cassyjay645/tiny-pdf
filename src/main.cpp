@@ -1,5 +1,12 @@
 #include <iostream>
+#include "include/mainwindow.hpp"
+
+#include <QtWidgets/QApplication>
 
 int main(int argc, char** argv) {
-    return 0;
+    QApplication app(argc, argv);
+    auto win = new MainWindow;
+    win->show();
+
+    return app.exec();
 }
