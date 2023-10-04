@@ -1,4 +1,5 @@
 build*
+books*
 cmake-build-*
 .cache
 .vscode
