@@ -3,3 +3,4 @@ books*
 cmake-build-*
 .cache
 .vscode
+CMakeLists.txt.user

@@ -12,6 +12,12 @@ MainWindow::MainWindow(QWidget *parent) :
     setWindowTitle("TinyPDF");
     
     ui->pdfView->setDocument(pdf_doc);
+    ui->pdfView->setZoomMode(QPdfView::ZoomMode::FitToWidth);
+    ui->pdfView->setPageMode(QPdfView::PageMode::MultiPage);
+}
+
+MainWindow::~MainWindow() {
+    
 }
 
 void MainWindow::open_file(const QUrl doc_location) {
@@ -23,8 +29,4 @@ void MainWindow::open_file(const QUrl doc_location) {
     } else {
         QMessageBox::critical(this, "Error", "Invalid file path");
     }
-}
-
-MainWindow::~MainWindow() {
-    
 }

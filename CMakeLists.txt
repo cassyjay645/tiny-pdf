@@ -16,27 +16,38 @@ set(CMAKE_AUTORCC ON)
 file(GLOB_RECURSE SOURCES src/*.c** src/*.ui)
 file(GLOB_RECURSE HEADERS include/*.h**)
 message("> Searching for QT...")
-find_package(QT NAMES Qt6 Qt5 REQUIRED COMPONENTS Widgets Pdf)
+message(WARNING "> Qt5 is temporarily disabled")
+find_package(QT NAMES Qt6 REQUIRED COMPONENTS Widgets Pdf)
 find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Widgets Pdf PdfWidgets Gui)
 
 if(QT_FOUND)
     add_compile_definitions(USE_GUI)
-    if(QT_VERSION_MAJOR GREATER_EQUAL 6)
-        message("> Using Qt${QT_VERSION_MAJOR}...")
-        message("> Sources: ${SOURCES}")
-        message("> Headers: ${HEADERS}")
-        qt_add_executable(${PROJECT_NAME} MANUAL_FINALIZATION ${SOURCES} ${HEADERS})
-        qt_finalize_executable(${PROJECT_NAME})
-    else()
-        message("> Using Qt${QT_VERSION_MAJOR}...")
-        add_executable(${PROJECT_NAME} ${SOURCES} ${HEADERS})
-    endif()
+    qt_standard_project_setup()
+    message("> Using Qt${QT_VERSION}...")
+    message("> Sources: ${SOURCES}")
+    message("> Headers: ${HEADERS}")
+
+    qt_add_executable(${PROJECT_NAME} MANUAL_FINALIZATION ${SOURCES} ${HEADERS})
+
+    set_property(TARGET ${PROJECT_NAME} APPEND PROPERTY
+        QT_ANDROID_PACKAGE_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/android
+    )
+
     target_link_libraries(${PROJECT_NAME} PRIVATE
-                          Qt${QT_VERSION_MAJOR}::Core 
-                          Qt${QT_VERSION_MAJOR}::Widgets 
-                          Qt${QT_VERSION_MAJOR}::Pdf 
-                          Qt${QT_VERSION_MAJOR}::Gui
-                          Qt${QT_VERSION_MAJOR}::PdfWidgets)
+                        Qt${QT_VERSION_MAJOR}::Core 
+                        Qt${QT_VERSION_MAJOR}::Widgets 
+                        Qt${QT_VERSION_MAJOR}::Pdf 
+                        Qt${QT_VERSION_MAJOR}::Gui
+                        Qt${QT_VERSION_MAJOR}::PdfWidgets)
+
+    install(TARGETS ${PROJECT_NAME}
+        BUNDLE DESTINATION .
+        LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR}
+    )
+
+    qt_finalize_executable(${PROJECT_NAME})
 else()
     message(FATAL_ERROR "> QT not found")
 endif()
+

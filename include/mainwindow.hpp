@@ -12,6 +12,7 @@
 #include <QPdfPageNavigator>
 #include <QStandardPaths>
 #include <QtMath>
+#include <QWheelEvent>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
